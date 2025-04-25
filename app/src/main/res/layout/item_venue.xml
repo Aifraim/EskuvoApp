@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:elevation="4dp"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/venue_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Helyszín neve"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/venue_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Helyszín címe" />
+
+        <TextView
+            android:id="@+id/venue_capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Férőhely: 100" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
