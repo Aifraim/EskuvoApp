@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "553961895602",
+    "project_id": "mobilalkfejl-306e7",
+    "storage_bucket": "mobilalkfejl-306e7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553961895602:android:241d70df75904d653dbbab",
+        "android_client_info": {
+          "package_name": "com.eskuvoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPn_YfoZe-IcYne1kon7rvHMI8djAH7bI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
