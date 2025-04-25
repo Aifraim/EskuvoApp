@@ -15,6 +15,7 @@ import com.eskuvoapp.R;
 import com.eskuvoapp.adapter.VenueAdapter;
 import com.eskuvoapp.model.Venue;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -83,6 +84,16 @@ public class VenueListActivity extends AppCompatActivity {
 
             return false;
         });
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String email = user.getEmail();
+            String username = email != null ? email.split("@")[0] : "Felhasználó";
+            username = username.substring(0, 1).toUpperCase() + username.substring(1);
+
+            toolbar.getMenu().findItem(R.id.user_info).setTitle("Üdv, " + username + "!");
+        }
+
     }
 
     @Override

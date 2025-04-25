@@ -6,12 +6,34 @@
     android:layout_height="match_parent"
     android:padding="24dp">
 
+    <!-- Nagy cím -->
+    <TextView
+        android:id="@+id/add_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Új helyszín hozzáadása"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Név címke -->
+    <TextView
+        android:id="@+id/label_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Helyszín neve"
+        app:layout_constraintTop_toBottomOf="@id/add_title"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Helyszín neve"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/label_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -21,15 +43,23 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Helyszín címke -->
+    <TextView
+        android:id="@+id/label_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cím / helyszín"
+        app:layout_constraintTop_toBottomOf="@id/name_input_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/location_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Helyszín címe"
-        app:layout_constraintTop_toBottomOf="@id/name_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/label_location"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/location_input"
@@ -37,15 +67,23 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Férőhely címke -->
+    <TextView
+        android:id="@+id/label_capacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Férőhely (szám)"
+        app:layout_constraintTop_toBottomOf="@id/location_input_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/capacity_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Férőhely"
-        app:layout_constraintTop_toBottomOf="@id/location_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/label_capacity"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/capacity_input"
@@ -54,6 +92,7 @@
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Mentés gomb -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/save_button"
         android:layout_width="0dp"
@@ -68,6 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"/>
 
+    <!-- Mégse gomb -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/cancel_button"
         android:layout_width="0dp"
@@ -81,5 +121,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
