@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/user_info"
+        android:title="Bejelentkezve: [email]"
+        android:enabled="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reservations"
+        android:title="Foglalásaim"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add"
+        android:title="Új helyszín"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_toggle_theme"
+        android:title="Világos / Sötét mód"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="Kijelentkezés"
+        app:showAsAction="never" />
+</menu>

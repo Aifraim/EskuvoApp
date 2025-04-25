@@ -1,5 +1,6 @@
 package com.eskuvoapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -15,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class VenueAddActivity extends AppCompatActivity {
 
     private EditText nameInput, locationInput, capacityInput;
-    private Button saveButton;
+    private Button saveButton, cancelButton;
     private FirebaseFirestore db;
 
     @Override
@@ -27,6 +28,7 @@ public class VenueAddActivity extends AppCompatActivity {
         locationInput = findViewById(R.id.location_input);
         capacityInput = findViewById(R.id.capacity_input);
         saveButton = findViewById(R.id.save_button);
+        cancelButton = findViewById(R.id.cancel_button);
 
         db = FirebaseFirestore.getInstance();
 
@@ -53,11 +55,19 @@ public class VenueAddActivity extends AppCompatActivity {
             db.collection("venues").add(venue)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(this, "Helyszín mentve", Toast.LENGTH_SHORT).show();
-                        finish(); // visszalépés listához
+                        finish();
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Hiba mentés közben: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
+        });
+
+
+        cancelButton.setOnClickListener(v -> {
+            Intent intent = new Intent(VenueAddActivity.this, VenueListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         });
     }
 }
