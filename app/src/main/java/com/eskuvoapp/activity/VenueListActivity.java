@@ -1,5 +1,7 @@
 package com.eskuvoapp.activity;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -30,12 +32,27 @@ public class VenueListActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.venue_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         adapter = new VenueAdapter(venueList);
         recyclerView.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
 
+        loadVenues();
+
+        FloatingActionButton addButton = findViewById(R.id.add_venue_button);
+        addButton.setOnClickListener(v -> {
+            Intent intent = new Intent(VenueListActivity.this, VenueAddActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadVenues();
+    }
+
+    private void loadVenues() {
         db.collection("venues").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -48,8 +65,6 @@ public class VenueListActivity extends AppCompatActivity {
                             }
                         }
                         adapter.notifyDataSetChanged();
-                    } else {
-                        Log.e("Firestore", "Hiba a lekérdezés során", task.getException());
                     }
                 });
     }
