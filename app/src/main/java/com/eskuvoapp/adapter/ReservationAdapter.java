@@ -11,15 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.eskuvoapp.R;
 import com.eskuvoapp.model.Reservation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder> {
 
     private List<Reservation> reservations;
+    private OnReservationClickListener listener;
+    private List<String> reservationIds = new ArrayList<>();
 
-    public ReservationAdapter(List<Reservation> reservations) {
+    public ReservationAdapter(List<Reservation> reservations, List<String> reservationIds, OnReservationClickListener listener) {
         this.reservations = reservations;
+        this.reservationIds = reservationIds;
+        this.listener = listener;
     }
+
 
     @NonNull
     @Override
@@ -33,6 +39,12 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         Reservation reservation = reservations.get(position);
         holder.venueName.setText(reservation.getVenueName());
         holder.date.setText("Dátum: " + reservation.getDate());
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onReservationClick(reservations.get(position), reservationIds.get(position));
+            }
+        });
+
     }
 
     @Override
@@ -49,4 +61,9 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
             date = itemView.findViewById(R.id.reservation_date);
         }
     }
+
+    public interface OnReservationClickListener {
+        void onReservationClick(Reservation reservation, String documentId);
+    }
+
 }
