@@ -16,9 +16,15 @@ import java.util.List;
 public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHolder> {
 
     private List<Venue> venues;
+    private OnVenueClickListener listener;
 
-    public VenueAdapter(List<Venue> venues) {
+    public interface OnVenueClickListener {
+        void onVenueClick(Venue venue);
+    }
+
+    public VenueAdapter(List<Venue> venues, OnVenueClickListener listener) {
         this.venues = venues;
+        this.listener = listener;
     }
 
     @NonNull
@@ -34,6 +40,12 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
         holder.nameText.setText(venue.getName());
         holder.locationText.setText(venue.getLocation());
         holder.capacityText.setText("Férőhely: " + venue.getCapacity());
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onVenueClick(venue);
+            }
+        });
     }
 
     @Override

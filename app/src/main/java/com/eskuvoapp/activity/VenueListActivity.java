@@ -36,7 +36,13 @@ public class VenueListActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.venue_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new VenueAdapter(venueList);
+        adapter = new VenueAdapter(venueList, venue -> {
+            Intent intent = new Intent(VenueListActivity.this, ReservationActivity.class);
+            intent.putExtra("venue_id", venue.getId());
+            intent.putExtra("venue_name", venue.getName());
+            startActivity(intent);
+        });
+
         recyclerView.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
