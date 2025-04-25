@@ -84,7 +84,7 @@ public class VenueListActivity extends AppCompatActivity {
                 return true;
 
             } else if (id == R.id.action_reservations) {
-                Toast.makeText(this, "Foglalásaim funkció még nincs kész 😉", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, MyReservationsActivity.class));
                 return true;
             }
 

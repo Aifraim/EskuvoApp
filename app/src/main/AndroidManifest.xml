@@ -26,6 +26,7 @@
         <activity android:name=".activity.VenueListActivity" />
         <activity android:name=".activity.VenueAddActivity" />
         <activity android:name=".activity.ReservationActivity" />
+        <activity android:name=".activity.MyReservationsActivity" />
     </application>
 
 </manifest>
