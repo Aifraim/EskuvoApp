@@ -1,5 +1,7 @@
 package com.eskuvoapp.activity;
 
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -80,6 +82,9 @@ public class MyReservationsActivity extends AppCompatActivity {
                     if (reservationList.isEmpty()) {
                         recyclerView.setVisibility(View.GONE);
                         emptyText.setVisibility(View.VISIBLE);
+
+                        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+                        emptyText.startAnimation(fadeIn);
                     } else {
                         recyclerView.setVisibility(View.VISIBLE);
                         emptyText.setVisibility(View.GONE);
