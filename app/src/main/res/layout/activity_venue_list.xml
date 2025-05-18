@@ -19,12 +19,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <EditText
+        android:id="@+id/search_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Helyszín keresése..."
+        android:inputType="text"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:background="@android:drawable/edit_text"
+        android:padding="12dp"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toBottomOf="@id/topAppBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <!-- Lista alatta -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/venue_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/topAppBar"
+        app:layout_constraintTop_toBottomOf="@id/search_input"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

@@ -4,7 +4,9 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -28,6 +30,7 @@ public class VenueListActivity extends AppCompatActivity {
     private VenueAdapter adapter;
     private List<Venue> venueList = new ArrayList<>();
     private FirebaseFirestore db;
+    private EditText searchInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,20 @@ public class VenueListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
+        searchInput = findViewById(R.id.search_input);
+
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchVenuesByName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         loadVenues();
 
@@ -134,6 +151,30 @@ public class VenueListActivity extends AppCompatActivity {
                         }
                         adapter.notifyDataSetChanged();
                     }
+                });
+    }
+
+    private void searchVenuesByName(String query) {
+        if (query.trim().isEmpty()) {
+            loadVenues(); // üres keresés → minden vissza
+            return;
+        }
+
+        db.collection("venues")
+                .orderBy("name")
+                .startAt(query)
+                .endAt(query + "\uf8ff")
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    venueList.clear();
+                    for (DocumentSnapshot doc : snapshot.getDocuments()) {
+                        Venue venue = doc.toObject(Venue.class);
+                        if (venue != null) {
+                            venue.setId(doc.getId());
+                            venueList.add(venue);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
                 });
     }
 }

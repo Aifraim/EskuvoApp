@@ -67,6 +67,7 @@ public class MyReservationsActivity extends AppCompatActivity {
 
         db.collection("reservations")
                 .whereEqualTo("userEmail", email)
+                .orderBy("date")
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     reservationList.clear();
