@@ -3,6 +3,8 @@ package com.eskuvoapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -69,5 +71,9 @@ public class VenueAddActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom);
+        findViewById(R.id.save_button).startAnimation(slideIn);
+        findViewById(R.id.cancel_button).startAnimation(slideIn);
     }
 }
