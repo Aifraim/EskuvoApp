@@ -1,9 +1,12 @@
 package com.eskuvoapp.activity;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -12,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -20,11 +24,14 @@ import androidx.core.content.ContextCompat;
 
 import com.eskuvoapp.R;
 import com.eskuvoapp.model.Reservation;
+import com.eskuvoapp.receiver.NotificationReceiver;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class ReservationActivity extends AppCompatActivity {
@@ -107,22 +114,8 @@ public class ReservationActivity extends AppCompatActivity {
                 .whereEqualTo("date", selectedDate)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "reservation_channel")
-                            .setSmallIcon(R.drawable.ic_launcher_foreground)
-                            .setContentTitle("Foglalás megerősítve")
-                            .setContentText("Lefoglaltad a(z) " + venueName + " helyszínt erre a napra: " + selectedDate)
-                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                                != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(this,
-                                    new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
-                        }
-                    }
-                    notificationManager.notify(1001, builder.build());
-
+                    reservationNotification();
+                    scheduleReminder(venueName, selectedDate, venueId);
                     if (!queryDocumentSnapshots.isEmpty()) {
                         Toast.makeText(this, "Ez a helyszín már foglalt erre a napra!", Toast.LENGTH_LONG).show();
                     } else {
@@ -139,4 +132,58 @@ public class ReservationActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void reservationNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "reservation_channel")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Foglalás megerősítve")
+                .setContentText("Lefoglaltad a(z) " + venueName + " helyszínt erre a napra: " + selectedDate)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+        }
+        notificationManager.notify(1001, builder.build());
+    }
+
+    @RequiresPermission(Manifest.permission.SCHEDULE_EXACT_ALARM)
+    private void scheduleReminder(String venueName, String date, String venueId) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            Date reservationDate = sdf.parse(date);
+
+            Calendar calendar = Calendar.getInstance();
+            if (reservationDate != null) {
+                calendar.setTime(reservationDate);
+                calendar.set(Calendar.HOUR_OF_DAY, 8); // Reggel 8
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+
+                Intent intent = new Intent(this, NotificationReceiver.class);
+                intent.putExtra("venue_name", venueName);
+                intent.putExtra("date", date);
+
+                int requestCode = venueId.hashCode() + date.hashCode();
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                        this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                if (alarmManager != null) {
+                    alarmManager.setExact(
+                            AlarmManager.RTC_WAKEUP,
+                            calendar.getTimeInMillis(),
+                            pendingIntent
+                    );
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
