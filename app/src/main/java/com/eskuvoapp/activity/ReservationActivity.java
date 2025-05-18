@@ -1,13 +1,18 @@
 package com.eskuvoapp.activity;
 
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.eskuvoapp.R;
 import com.eskuvoapp.model.Reservation;
@@ -55,6 +60,18 @@ public class ReservationActivity extends AppCompatActivity {
 
             checkAndMakeReservation();
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "reservation_channel",
+                    "Foglalások",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+        }
+
     }
 
     private void showDatePicker() {
@@ -86,6 +103,15 @@ public class ReservationActivity extends AppCompatActivity {
                 .whereEqualTo("date", selectedDate)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "reservation_channel")
+                            .setSmallIcon(R.drawable.ic_launcher_foreground)
+                            .setContentTitle("Foglalás megerősítve")
+                            .setContentText("Lefoglaltad a(z) " + venueName + " helyszínt erre a napra: " + selectedDate)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                    notificationManager.notify(1001, builder.build());
+
                     if (!queryDocumentSnapshots.isEmpty()) {
                         Toast.makeText(this, "Ez a helyszín már foglalt erre a napra!", Toast.LENGTH_LONG).show();
                     } else {
