@@ -1,9 +1,11 @@
 package com.eskuvoapp.activity;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,8 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import com.eskuvoapp.R;
 import com.eskuvoapp.model.Reservation;
@@ -110,6 +114,13 @@ public class ReservationActivity extends AppCompatActivity {
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                                != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this,
+                                    new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+                        }
+                    }
                     notificationManager.notify(1001, builder.build());
 
                     if (!queryDocumentSnapshots.isEmpty()) {
